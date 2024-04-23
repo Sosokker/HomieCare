@@ -1,0 +1,5 @@
+minio>=7.2.5
+fastapi[all]
+opencv-python
+sqlalchemy
+python-decouple
