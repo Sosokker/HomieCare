@@ -7,7 +7,7 @@ app = FastAPI(
     title="Dispatch",
     description="Hello Stranger.",
     root_path="/api/v1",
-    docs_url=None,
+    docs_url="/docs/swagger",
     openapi_url="/docs/openapi.json",
     redoc_url="/docs"
     )
