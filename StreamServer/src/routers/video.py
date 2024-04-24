@@ -4,11 +4,12 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
 from scheme import Camera
+from utils import save_to_config, read_cameras_from_config
 
 
 router = APIRouter()
 
-cameras: list[Camera] = []
+cameras: list[Camera] = read_cameras_from_config('config.json')
 
 # --- UTILITY FUNCTIONS ---
 
@@ -26,6 +27,7 @@ async def add_camera(rtsp_link: str):
         id = generate_camera_id()
         camera = Camera(camera_id=id, link=rtsp_link)
         cameras.append(camera)
+        save_to_config(key="cameras", value=cameras)
         return {"message": "Camera added successfully", "camera_id": id}
     else:
         raise HTTPException(status_code=400, detail="Invalid RTSP link")
@@ -68,5 +70,6 @@ async def disconnect_camera(camera_id: int) -> dict:
     for camera in cameras:
         if camera.camera_id == camera_id:
             cameras.remove(camera)
+            save_to_config(key="cameras", value=cameras)
             return {"message": f"Camera {camera_id} disconnected successfully"}
     raise HTTPException(status_code=404, detail=f"Camera {camera_id} not found")

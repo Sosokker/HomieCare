@@ -184,5 +184,6 @@ dist-ssr
 *.sln
 *.sw?
 
+config.json
 
 ActionDetector/
