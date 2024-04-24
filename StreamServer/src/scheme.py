@@ -20,8 +20,8 @@ class WeatherDataBase(BaseModel):
     indoor_light: Optional[int]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Camera(BaseModel):
-    rtsp_link: str
-    rtmp_link: str = None
+    camera_id: int
+    link: str
