@@ -1,24 +1,14 @@
-import asyncio
-import cv2
-import datetime
-import os
+from cv2 import VideoCapture, imencode
 
-from threading import Thread
-
-from cv2 import VideoCapture, VideoWriter, imencode
-
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
 from scheme import Camera
-from database import minio_client
-from config import VIDEO_BUCKET, TEMP_VIDEO_FILE
 
-from typing import List
 
 router = APIRouter()
 
-cameras: List[Camera] = []
+cameras: list[Camera] = []
 
 # --- UTILITY FUNCTIONS ---
 
@@ -30,7 +20,7 @@ def generate_camera_id() -> int:
 
 # --- ROUTER ENDPOINTS ---
 
-@router.post("/add_camera", response_model=dict)
+@router.post("/add", response_model=dict)
 async def add_camera(rtsp_link: str):
     if rtsp_link:
         id = generate_camera_id()
@@ -41,12 +31,12 @@ async def add_camera(rtsp_link: str):
         raise HTTPException(status_code=400, detail="Invalid RTSP link")
 
 
-@router.get("/list_cameras", response_model=List[Camera])
-async def list_cameras() -> List[Camera]:
+@router.get("/list", response_model=list[Camera])
+async def list_cameras() -> list[Camera]:
     return cameras
 
 
-@router.get("/stream_video/{camera_id}")
+@router.get("/stream/{camera_id}")
 async def stream_video(camera_id: int) -> StreamingResponse:
     available_cameras = [camera.camera_id for camera in cameras]
     if camera_id in available_cameras:
@@ -73,7 +63,7 @@ async def stream_video(camera_id: int) -> StreamingResponse:
         raise HTTPException(status_code=404, detail="No cameras available")
 
 
-@router.delete("/disconnect_camera/{camera_id}", response_model=dict)
+@router.delete("/remove/{camera_id}", response_model=dict)
 async def disconnect_camera(camera_id: int) -> dict:
     for camera in cameras:
         if camera.camera_id == camera_id:
