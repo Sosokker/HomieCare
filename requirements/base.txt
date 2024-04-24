@@ -3,3 +3,6 @@ fastapi[all]
 opencv-python
 sqlalchemy
 python-decouple
+tqdm
+scipy
+matplotlib
