@@ -5,7 +5,8 @@ This file contains the SQLAlchemy model for the weather data.
 from sqlalchemy import Column, Integer, Float, DateTime, Text
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from database import Base
+
 
 class WeatherData(Base):
     __tablename__ = "data"

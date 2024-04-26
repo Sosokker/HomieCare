@@ -1,10 +1,10 @@
 import uvicorn
 
 from fastapi import FastAPI
-from routers import video
+from routers import video, weather
 
 app = FastAPI(
-    title="Dispatch",
+    title="Healthcare-System",
     description="Hello Stranger.",
     root_path="/api/v1",
     docs_url="/docs/swagger",
@@ -13,6 +13,7 @@ app = FastAPI(
     )
 
 app.include_router(video.router, prefix="/camera")
+app.include_router(weather.router, prefix="/weather")
 
 @app.get("/")
 def read_root():
