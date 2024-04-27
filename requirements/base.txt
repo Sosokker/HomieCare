@@ -6,3 +6,5 @@ python-decouple
 tqdm
 scipy
 matplotlib
+pymysql
+apscheduler

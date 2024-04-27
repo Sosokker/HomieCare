@@ -9,16 +9,22 @@ Attributes:
     MINIO_ENDPOINT: The endpoint of the MinIO storage
     MINIO_ACCESS_KEY: The access key of the MinIO storage
     MINIO_SECRET_KEY: The secret key of the MinIO storage
+    VIDEO_BUCKET: The bucket name for storing video files
 """
 
-from decouple import Config
+from decouple import config
 
-config = Config('.env')
 
-DB_HOST = config.get('DB_HOST', default='localhost')
-DB_USER = config.get('DB_USER', default='root')
-DB_PASSWD = config.get('DB_PASSWD', default='root')
-DB_NAME = config.get('DB_NAME')
-MINIO_ENDPOINT = config.get('MINIO_ENDPOINT', default='localhost:9000')
-MINIO_ACCESS_KEY = config.get('MINIO_ACCESS_KEY')
-MINIO_SECRET_KEY = config.get('MINIO_SECRET_KEY')
+DB_HOST = config('DB_HOST')
+DB_USER = config('DB_USER')
+DB_PASSWD = config('DB_PASSWD')
+DB_NAME = config('DB_NAME')
+MINIO_ENDPOINT = config('MINIO_ENDPOINT')
+MINIO_ACCESS_KEY = config('MINIO_ACCESS_KEY')
+MINIO_SECRET_KEY = config('MINIO_SECRET_KEY')
+VIDEO_BUCKET = config('VIDEO_BUCKET')
+TEMP_VIDEO_FILE = config('TEMP_VIDEO_FILE')
+CONFIG_FILE = config('CONFIG_FILE')
+YOLO_WEIGHT_FILE = config('YOLO_WEIGHT_FILE')
+SPPE_WEIGHT_FILE = config('SPPE_WEIGHT_FILE')
+TSSTG_WEIGHT_FILE = config('TSSTG_WEIGHT_FILE')

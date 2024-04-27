@@ -64,3 +64,4 @@ class AverageIndoorData(BaseModel):
 class Camera(BaseModel):
     camera_id: int
     link: str
+    status: bool = False
