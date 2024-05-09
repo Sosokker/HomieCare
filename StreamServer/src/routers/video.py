@@ -16,13 +16,15 @@ from config import TEMP_VIDEO_FILE, VIDEO_BUCKET
 from scheme import Camera
 from utils import save_to_config, read_cameras_from_config
 
-from analytic.action.action_model import generate_action_model_frame
+from analytic.action.action_model import ActionModel
 
 
 jobstores = {
 'default': MemoryJobStore()
 }
 scheduler = AsyncIOScheduler(jobstores=jobstores, timezone='Asia/Bangkok')
+
+action_model = ActionModel()
 
 @asynccontextmanager
 async def lifespan(application: FastAPI):
@@ -127,7 +129,7 @@ async def stream_action_video(camera_id: int) -> StreamingResponse:
     if not cap.isOpened():
         raise HTTPException(status_code=404, detail="Camera is closed or not available")
 
-    return StreamingResponse(generate_action_model_frame(camera.link), media_type="multipart/x-mixed-replace; boundary=frame")
+    return StreamingResponse(action_model.generate_action_model_frame(camera.link), media_type="multipart/x-mixed-replace; boundary=frame")
 
 
 @router.delete("/remove/{camera_id}", response_model=dict)
