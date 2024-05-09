@@ -188,3 +188,5 @@ config.json
 
 *.pth
 *.cfg
+
+frontend/
