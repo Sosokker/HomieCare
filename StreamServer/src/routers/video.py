@@ -1,5 +1,6 @@
 import cv2
 import time
+import httpx
 
 from cv2 import VideoCapture, imencode
 from contextlib import asynccontextmanager
@@ -12,7 +13,7 @@ from fastapi.responses import StreamingResponse
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.jobstores.memory import MemoryJobStore
 from database import minio_client
-from config import TEMP_VIDEO_FILE, VIDEO_BUCKET
+from config import TEMP_VIDEO_FILE, VIDEO_BUCKET, LINE_NOTIFY_TOKEN
 from scheme import Camera
 from utils import save_to_config, read_cameras_from_config
 
@@ -24,8 +25,6 @@ jobstores = {
 }
 scheduler = AsyncIOScheduler(jobstores=jobstores, timezone='Asia/Bangkok')
 
-action_model = ActionModel()
-
 @asynccontextmanager
 async def lifespan(application: FastAPI):
     scheduler.start()
@@ -35,6 +34,8 @@ async def lifespan(application: FastAPI):
 router = APIRouter()
 
 cameras: list[Camera] = read_cameras_from_config('config.json')
+
+action_model = ActionModel()
 
 # --- UTILITY FUNCTIONS ---
 
@@ -70,6 +71,14 @@ def check_camera_status():
         cap.release()
     save_to_config(key="cameras", value=cameras)
 
+
+@scheduler.scheduled_job('interval', seconds=10)
+def check_falldown_action():
+    """If action Fall Down is detected, notify the user"""
+    if "Fall Down" in action_model.ACTION_LIST:
+        # send post to https://notify-api.line.me/api/notify
+        # Authorization: Bearer use LINE_NOTIFY_TOKEN (ChannelAccessToken)
+        httpx.post("https://notify-api.line.me/api/notify", headers={"Authorization": f"Bearer {LINE_NOTIFY_TOKEN}"}, data={"message": "Fall Down detected!"})
 
 # --- ROUTER ENDPOINTS ---
 
