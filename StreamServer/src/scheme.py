@@ -61,7 +61,23 @@ class AverageIndoorData(BaseModel):
     avg_indoor_temp: Optional[float]
     avg_indoor_light: Optional[float]
 
+
 class Camera(BaseModel):
     camera_id: int
     link: str
     status: bool = False
+
+
+class IndoorTemperature(BaseModel):
+    timestamp: Optional[datetime]
+    indoor_temp: Optional[float]
+
+
+# class Action(BaseModel):
+#     timestamp: Optional[datetime]
+#     action: Optional[str]
+#     probability: Optional[float]
+#     camera_id: Optional[int]
+
+#     class Config:
+#         from_attributes = True
