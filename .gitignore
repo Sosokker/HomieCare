@@ -189,8 +189,6 @@ config.json
 *.pth
 *.cfg
 
-frontend/
-
 # Logs
 logs
 *.log
