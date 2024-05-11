@@ -1,6 +1,7 @@
 import uvicorn
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routers import video, weather, prediction
 
 
@@ -13,6 +14,20 @@ app = FastAPI(
     redoc_url="/docs",
     lifespan=video.lifespan
     )
+
+origins = [
+    "http://localhost",
+    "http://localhost:5173",
+]
+
+# Add CORS middleware to the FastAPI app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 
 app.include_router(video.router, prefix="/camera")
 app.include_router(weather.router, prefix="/weather")
