@@ -68,9 +68,11 @@ class Camera(BaseModel):
     status: bool = False
 
 
-class IndoorTemperature(BaseModel):
+class PredictonTemperature(BaseModel):
     timestamp: Optional[datetime]
     indoor_temp: Optional[float]
+    outdoor_temp: Optional[float]
+
 
 
 # class Action(BaseModel):

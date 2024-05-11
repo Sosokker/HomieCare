@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from analytic.health.indoor_model import XgboostIndoorModel
 from config import WEATHER_API_KEY, LAT, LON
 from database import SessionLocal
-from scheme import IndoorTemperature
+from scheme import PredictonTemperature
 from models import PredictionData
 from query.prediction import get_temp_prediction_data, get_feature_prediction_data
 
@@ -38,7 +38,7 @@ def _fetch_data_from_api() -> dict:
     return response.json()
 
 
-@router.get("/indoor/predict/", response_model=list[IndoorTemperature])
+@router.get("/indoor/predict/", response_model=list[PredictonTemperature])
 async def get_tomorrow_indoor_temp(db: Session = Depends(get_db)):
     result = get_temp_prediction_data(db)
     if not result:
@@ -54,7 +54,7 @@ async def get_tomorrow_indoor_temp(db: Session = Depends(get_db)):
                     data = data['main']
                     features = [data['temp'], data['feels_like'], data['pressure'], data['humidity']]
                     result = xgboost.predict(features)
-                    results.append(IndoorTemperature(indoor_temp=result, timestamp=ts))
+                    results.append(PredictonTemperature(indoor_temp=result, timestamp=ts, outdoor_temp=data['temp']))
                     new_data_entry = PredictionData(
                         timestamp=ts,
                         indoor_temp=result,
@@ -74,5 +74,5 @@ async def get_tomorrow_indoor_temp(db: Session = Depends(get_db)):
         else:
             for i in features:
                 indoor = xgboost.predict([i.outdoor_temp, i.outdoor_feels_like, i.outdoor_pressure, i.outdoor_humidity])
-                result.append(IndoorTemperature(timestamp=i.timestamp, indoor_temp=indoor))
+                result.append(PredictonTemperature(timestamp=i.timestamp, indoor_temp=indoor, outdoor_temp=i.outdoor_temp))
     return result

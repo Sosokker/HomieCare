@@ -12,11 +12,11 @@ def get_temp_prediction_data(session: Session):
     limit_day = current_time + timedelta(days=5)
 
     return session.query(
-        PredictionData.timestamp, PredictionData.indoor_temp
+        PredictionData.timestamp, PredictionData.indoor_temp, PredictionData.outdoor_temp
     ).filter(
         PredictionData.timestamp >= current_time,
         PredictionData.timestamp < limit_day
-    ).order_by(PredictionData.timestamp.desc()).all()
+    ).order_by(PredictionData.timestamp.asc()).limit(12)
 
 
 def get_feature_prediction_data(session: Session):
@@ -30,4 +30,4 @@ def get_feature_prediction_data(session: Session):
     ).filter(
         PredictionData.timestamp >= current_time,
         PredictionData.timestamp < limit_day
-    ).order_by(PredictionData.timestamp.desc()).all()
+    ).order_by(PredictionData.timestamp.asc()).limit(12)
