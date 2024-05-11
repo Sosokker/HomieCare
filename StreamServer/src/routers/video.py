@@ -168,3 +168,42 @@ async def disconnect_camera(camera_id: int) -> dict:
             save_to_config(key="cameras", value=cameras)
             return {"message": f"Camera {camera_id} disconnected successfully"}
     raise HTTPException(status_code=404, detail=f"Camera {camera_id} not found")
+
+
+@router.websocket("/ws/{camera_id}")
+async def websocket_endpoint(camera_id: int, websocket: WebSocket):
+    camera = next((c for c in cameras if c.camera_id == camera_id), None)
+    if not camera:
+        await websocket.close(code=1000)
+        return
+    
+    if not camera.status:
+        await websocket.close(code=1000)
+        return
+    
+    cap = VideoCapture(camera.link)
+    if not cap.isOpened():
+        await websocket.close(code=1000)
+        return
+    
+    try:
+        await websocket.accept()
+
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                await websocket.close(code=1000)
+                break
+            
+            ret, buffer = imencode('.png', frame)
+            if not ret:
+                await websocket.close(code=1000)
+                break
+            await websocket.send_bytes(buffer.tobytes())
+    except WebSocketDisconnect:
+        print("WebSocket disconnected")
+    except Exception as e:
+        print(f"Error sending frame: {e}")
+    finally:
+        cap.release()
+        await websocket.close(code=1000)
