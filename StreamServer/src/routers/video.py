@@ -1,3 +1,4 @@
+import os
 import cv2
 import time
 import httpx
@@ -6,8 +7,9 @@ from cv2 import VideoCapture, imencode
 from contextlib import asynccontextmanager
 from datetime import datetime
 from threading import Thread
+from database import SessionLocal
 
-from fastapi import APIRouter, BackgroundTasks, FastAPI, HTTPException
+from fastapi import APIRouter, BackgroundTasks, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import StreamingResponse
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -45,16 +47,31 @@ def generate_camera_id() -> int:
     cameras.sort(key=lambda x: x.camera_id)
     return cameras[-1].camera_id + 1
 
-def upload_to_minio(camera_id):
+def upload_to_minio(cap: VideoCapture, camera_id: int):
+    """Upload Image to Minio Bucket"""
     current_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-    temp_file_name = f"camera_{camera_id}_{current_time}.avi"
-    minio_client.fput_object(VIDEO_BUCKET, temp_file_name, f"{TEMP_VIDEO_FILE}_{camera_id}.avi")
+    image_name = f"{camera_id}_{current_time}.jpg"
+    
+    ret, frame = cap.read()
+    if not ret:
+        raise ValueError("Failed to read frame from VideoCapture")
+    
+    success = cv2.imwrite(image_name, frame)
+    if not success:
+        raise ValueError("Failed to write frame as JPEG image")
+    
+    try:
+        with open(image_name, "rb") as image_file:
+            minio_client.put_object(VIDEO_BUCKET, image_name, image_file, length=os.path.getsize(image_name))
+    except Exception as e:
+        raise RuntimeError(f"Failed to upload image to Minio bucket: {e}")
+    finally:
+        os.remove(image_name)
 
 # --- BACKGROUND SCHEDULER ---
 
-# TODO: Save video to Minio
 
-@scheduler.scheduled_job('interval', seconds=60)
+@scheduler.scheduled_job('interval', seconds=30, max_instances=2)
 def check_camera_status():
     """
     Check if the camera is available or not
@@ -68,6 +85,7 @@ def check_camera_status():
             camera.status = False
         else:
             camera.status = True
+            upload_to_minio(cap, camera.camera_id)
         cap.release()
     save_to_config(key="cameras", value=cameras)
 
