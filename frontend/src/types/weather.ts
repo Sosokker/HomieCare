@@ -25,3 +25,9 @@ interface WeatherData {
   avg_outdoor_pm25: number;
   avg_outdoor_pm10: number;
 }
+
+interface IndoorPredictData {
+  timestamp: string;
+  indoor_temp: number;
+  outdoor_temp: number;
+}

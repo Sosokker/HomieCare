@@ -42,8 +42,23 @@ const fetchIndoorWeatherData = async (
   }
 };
 
+const fetchIndoorPredictData = async (): Promise<
+  IndoorPredictData[] | null
+> => {
+  try {
+    const response = await axios.get<IndoorPredictData[]>(
+      'http://127.0.0.1:8000/api/v1/weather/indoor/predict/',
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching indoor predict data:', error);
+    return null;
+  }
+};
+
 export {
   fetchWeatherDataList,
   fetchOutdoorWeatherData,
   fetchIndoorWeatherData,
+  fetchIndoorPredictData,
 };
