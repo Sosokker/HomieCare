@@ -1,3 +1,3 @@
 interface Message {
-  message: string;
+  message: string | undefined;
 }

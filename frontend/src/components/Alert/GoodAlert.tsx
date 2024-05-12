@@ -20,7 +20,7 @@ const GoodAlert: React.FC<Message> = ({ message }) => {
       </div>
       <div className="w-full">
         <h5 className="mb-3 text-lg font-semibold text-black dark:text-[#34D399] ">
-          Message Sent Successfully
+          Everything is good
         </h5>
         <p className="text-base leading-relaxed text-body">{message}</p>
       </div>

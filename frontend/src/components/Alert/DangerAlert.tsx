@@ -19,9 +19,7 @@ const DangerAlert: React.FC<Message> = ({ message }) => {
         </svg>
       </div>
       <div className="w-full">
-        <h5 className="mb-3 font-semibold text-[#B45454]">
-          There were 1 errors with your submission
-        </h5>
+        <h5 className="mb-3 font-semibold text-[#B45454]">Dangerous!</h5>
         <ul>
           <li className="leading-relaxed text-[#CD5D5D]">{message}</li>
         </ul>
