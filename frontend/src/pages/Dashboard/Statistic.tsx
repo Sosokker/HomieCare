@@ -8,6 +8,8 @@ import { FaTemperatureHigh, FaRegLightbulb } from 'react-icons/fa';
 import { WiHumidity } from 'react-icons/wi';
 import { PiFactoryBold } from 'react-icons/pi';
 import { TbBuildingFactory } from 'react-icons/tb';
+import Alert from '../../components/Alert/Alert';
+
 import {
   fetchWeatherDataList,
   fetchOutdoorWeatherData,
@@ -47,32 +49,28 @@ const Statistic: React.FC = () => {
           <CardDataStats
             title="Outdoor Temperature"
             total={`${outdoorWeatherData?.avg_outdoor_temp.toPrecision(3) ?? '-'} °C`}
-            rate="0.43%"
-            levelUp
+            rate=""
           >
             <FaTemperatureHigh />
           </CardDataStats>
           <CardDataStats
             title="Outdoor Humidity"
             total={`${outdoorWeatherData?.avg_outdoor_humidity ?? '-'} %`}
-            rate="4.35%"
-            levelUp
+            rate=""
           >
             <WiHumidity />
           </CardDataStats>
           <CardDataStats
             title="Outdoor PM2.5"
             total={`${outdoorWeatherData?.avg_outdoor_pm25 ?? '-'} µg/m³`}
-            rate="2.59%"
-            levelUp
+            rate=""
           >
             <PiFactoryBold />
           </CardDataStats>
           <CardDataStats
             title="Outdoor PM10"
             total={`${outdoorWeatherData?.avg_outdoor_pm10 ?? '-'} µg/m³`}
-            rate="0.95%"
-            levelDown
+            rate=""
           >
             <TbBuildingFactory />
           </CardDataStats>
@@ -81,21 +79,29 @@ const Statistic: React.FC = () => {
           <CardDataStats
             title="Indoor Temperature"
             total={`${indoorWeatherData?.avg_indoor_temp ?? '-'} °C`}
-            rate="0.43%"
-            levelUp
+            rate=""
           >
             <FaTemperatureHigh />
           </CardDataStats>
           <CardDataStats
             title="Indoor Light"
             total={`${indoorWeatherData?.avg_indoor_light ?? '-'} Lux`}
-            rate="4.35%"
-            levelUp
+            rate=""
           >
             <FaRegLightbulb />
           </CardDataStats>
         </div>
 
+        {/* Recommendation Card */}
+        <div className="mt-6">
+          <Alert
+            indoor_temp={indoorWeatherData?.avg_indoor_temp}
+            outdoor_temp={outdoorWeatherData?.avg_outdoor_temp}
+            outdoor_pm25={outdoorWeatherData?.avg_outdoor_pm25}
+            outdoor_pm10={outdoorWeatherData?.avg_outdoor_pm10}
+            outdoor_humidity={outdoorWeatherData?.avg_outdoor_humidity}
+          />
+        </div>
         <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
           <LineChart />
           <BarChart />
