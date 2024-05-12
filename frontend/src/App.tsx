@@ -4,9 +4,8 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import Statistic from './pages/Dashboard/Statistic';
-import Alerts from './pages/UiElements/Alerts';
-import Buttons from './pages/UiElements/Buttons';
 import Camera from './pages/Camera';
+import Snapshot from './pages/Snapshot';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,7 +47,7 @@ function App() {
           element={
             <>
               <PageTitle title="Snapshot" />
-              <Alerts />
+              <Snapshot />
             </>
           }
         />
