@@ -74,6 +74,19 @@ class PredictonTemperature(BaseModel):
     outdoor_temp: Optional[float]
 
 
+class RecommendationData(BaseModel):
+    timestamp: Optional[datetime]
+    recommendation: Optional[str]
+    status: Optional[str]
+
+
+class HealthData(BaseModel):
+    indoor_temp: float
+    outdoor_temp: float
+    outdoor_pm25: float
+    outdoor_pm10: float
+    outdoor_humidity: float
+
 
 # class Action(BaseModel):
 #     timestamp: Optional[datetime]
