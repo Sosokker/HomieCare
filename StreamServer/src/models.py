@@ -36,11 +36,9 @@ class PredictionData(Base):
     indoor_temp = Column(Float)
 
 
-# class ActionData(Base):
-#     __tablename__ = "action"
+class ActionData(Base):
+    __tablename__ = "action"
 
-#     id = Column(Integer, primary_key=True)
-#     timestamp = Column(DateTime)
-#     action = Column(Text)
-#     probability = Column(Float)
-#     camera_id = Column(Integer)
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime)
+    action = Column(Text)

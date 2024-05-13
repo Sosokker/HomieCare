@@ -88,11 +88,6 @@ class HealthData(BaseModel):
     outdoor_humidity: float
 
 
-# class Action(BaseModel):
-#     timestamp: Optional[datetime]
-#     action: Optional[str]
-#     probability: Optional[float]
-#     camera_id: Optional[int]
-
-#     class Config:
-#         from_attributes = True
+class ActionData(BaseModel):
+    timestamp: Optional[datetime]
+    action: Optional[str]
