@@ -6,8 +6,8 @@ from routers import video, weather, prediction, camera, recommend, action
 
 
 app = FastAPI(
-    title="Healthcare-System",
-    description="Hello Stranger.",
+    title="HomieCare",
+    description="API documentation for HomieCare, monitoring systems.",
     root_path="/api/v1",
     docs_url="/docs/swagger",
     openapi_url="/docs/openapi.json",

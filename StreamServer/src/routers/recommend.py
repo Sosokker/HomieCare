@@ -7,6 +7,7 @@ router = APIRouter()
 
 @router.post("/recommendation/", response_model=list[RecommendationData])
 async def get_health_recommendation(data: HealthData):
+    """Provide health recommendations based on the provided health data."""
     recommendation = []
     current_time = datetime.now()
 

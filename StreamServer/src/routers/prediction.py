@@ -40,6 +40,7 @@ def _fetch_data_from_api() -> dict:
 
 @router.get("/indoor/predict/", response_model=list[PredictonTemperature])
 async def get_tomorrow_indoor_temp(db: Session = Depends(get_db)):
+    """Get tomorrow indoor temperature prediction data."""
     result = get_temp_prediction_data(db)
     if not result:
         features = get_feature_prediction_data(db)

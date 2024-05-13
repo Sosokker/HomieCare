@@ -23,6 +23,7 @@ def get_db():
 
 @router.get("/", response_model=list[WeatherDataBase])
 async def get_latest_weather_data(db: Session = Depends(get_db)):
+    """Get the latest weather data."""
     weather_data = get_weather_data(db)
     if not weather_data:
         raise HTTPException(status_code=404, detail="Weather data not found")
@@ -31,6 +32,7 @@ async def get_latest_weather_data(db: Session = Depends(get_db)):
 
 @router.get("/{days}", response_model=list[WeatherDataBase])
 async def get_weather_data_last_n_days(days: int, db: Session = Depends(get_db)):
+    """Get the weather data for the last n days."""
     weather_data = get_last_n_day_data(db, days)
     if not weather_data:
         raise HTTPException(status_code=404, detail=f"Weather data for the last {days} days not found")
@@ -39,6 +41,7 @@ async def get_weather_data_last_n_days(days: int, db: Session = Depends(get_db))
 
 @router.get("/indoor/{days}", response_model=list[IndoorDataBase])
 async def get_indoor_data_last_n_days(days: int, db: Session = Depends(get_db)):
+    """Get the indoor data for the last n days."""
     indoor_data = get_indoor_data(db, days)
     if not indoor_data:
         raise HTTPException(status_code=404, detail=f"Indoor data for the last {days} days not found")
@@ -46,6 +49,7 @@ async def get_indoor_data_last_n_days(days: int, db: Session = Depends(get_db)):
 
 @router.get("/outdoor/{days}", response_model=list[OutdoorDataBase])
 async def get_outdoor_data_last_n_days(days: int, db: Session = Depends(get_db)):
+    """Get the outdoor data for the last n days."""
     outdoor_data = get_outdoor_data(db, days)
     if not outdoor_data:
         raise HTTPException(status_code=404, detail="Outdoor data not found")
@@ -54,6 +58,7 @@ async def get_outdoor_data_last_n_days(days: int, db: Session = Depends(get_db))
 
 @router.get("/average/outdoor/{days}", response_model=AverageOutdoorData)
 async def get_average_outdoor_data(days: int, db: Session = Depends(get_db)):
+    """Get the average outdoor data for the last n days."""
     average_outdoor_data = get_average_outdoor_data_last_n_day(db, days)
     if not average_outdoor_data:
         raise HTTPException(status_code=404, detail=f"Average outdoor data for the last {days} days not found")
@@ -72,6 +77,7 @@ async def get_average_outdoor_data(days: int, db: Session = Depends(get_db)):
 
 @router.get("/average/indoor/{days}", response_model=AverageIndoorData)
 async def get_average_indoor_data(days: int, db: Session = Depends(get_db)):
+    """Get the average indoor data for the last n days."""
     average_indoor_data = get_average_indoor_data_last_n_day(db, days)
     if not average_indoor_data:
         raise HTTPException(status_code=404, detail=f"Average indoor data for the last {days} days not found")
