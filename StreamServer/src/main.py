@@ -2,7 +2,7 @@ import uvicorn
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import video, weather, prediction, camera, recommend
+from routers import video, weather, prediction, camera, recommend, action
 
 
 app = FastAPI(
@@ -34,6 +34,7 @@ app.include_router(weather.router, prefix="/weather")
 app.include_router(prediction.router, prefix="/weather")
 app.include_router(camera.router, prefix="/camera")
 app.include_router(recommend.router, prefix="/recommend")
+app.include_router(action.router, prefix="/action")
 
 @app.get("/")
 def read_root():
