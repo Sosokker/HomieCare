@@ -105,9 +105,8 @@ class ActionModel:
                     pts = np.array(track.keypoints_list, dtype=np.float32)
                     out = self.action_model.predict(pts, frame.shape[:2])
                     action_name = self.action_model.class_names[out[0].argmax()]
-                    action = '{}: {:.2f}%'.format(action_name, out[0].max() * 100)
                     # Add action to action list.
-                    ActionModel.ACTION_LIST.append(action)
+                    ActionModel.ACTION_LIST.append(action_name)
                     if action_name == 'Fall Down':
                         ActionModel.IS_FALL_DOWN = True
 
