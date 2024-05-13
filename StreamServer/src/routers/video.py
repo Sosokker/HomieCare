@@ -253,3 +253,10 @@ async def websocket_endpoint(camera_id: int, websocket: WebSocket):
     finally:
         cap.release()
         await websocket.close(code=1000)
+
+@router.get("/action/test", response_model=bool)
+def test_notification():
+    """Test notification by sending a POST request to LINE Notify API"""
+    if action_model.IS_FALL_DOWN:
+        return True
+    return False
