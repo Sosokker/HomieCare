@@ -16,7 +16,7 @@ from fastapi.responses import StreamingResponse
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.jobstores.memory import MemoryJobStore
 from database import minio_client
-from config import TEMP_VIDEO_FILE, VIDEO_BUCKET, LINE_NOTIFY_TOKEN
+from config import VIDEO_BUCKET, LINE_NOTIFY_TOKEN
 from scheme import Camera
 from utils import save_to_config, read_cameras_from_config
 from models import ActionData
@@ -142,6 +142,7 @@ def check_falldown_action():
 
 @router.post("/add", response_model=dict)
 async def add_camera(link: str):
+    """Add a new camera to the system."""
     if link:
         id = generate_camera_id()
         camera = Camera(camera_id=id, link=link, status=False)
@@ -154,11 +155,13 @@ async def add_camera(link: str):
 
 @router.get("/list", response_model=list[Camera])
 async def list_cameras() -> list[Camera]:
+    """List all available cameras."""
     return cameras
 
 
 @router.get("/stream/{camera_id}")
 async def stream_video(camera_id: int) -> StreamingResponse:
+    """Stream video from the camera with the given camera_id."""
     camera = next((c for c in cameras if c.camera_id == camera_id), None)
     if not camera:
         raise HTTPException(status_code=404, detail="Camera not found")
@@ -185,6 +188,7 @@ async def stream_video(camera_id: int) -> StreamingResponse:
 
 @router.get("/stream/action/{camera_id}")
 async def stream_action_video(camera_id: int) -> StreamingResponse:
+    """Stream video from the camera with the given camera_id with action model."""
     camera = next((c for c in cameras if c.camera_id == camera_id), None)
     if not camera:
         raise HTTPException(status_code=404, detail="Camera not found")
@@ -201,6 +205,7 @@ async def stream_action_video(camera_id: int) -> StreamingResponse:
 
 @router.delete("/remove/{camera_id}", response_model=dict)
 async def disconnect_camera(camera_id: int) -> dict:
+    """Disconnect the camera with the given camera_id."""
     global video_writer
     for camera in cameras:
         if camera.camera_id == camera_id:
@@ -212,6 +217,7 @@ async def disconnect_camera(camera_id: int) -> dict:
 
 @router.websocket("/ws/{camera_id}")
 async def websocket_endpoint(camera_id: int, websocket: WebSocket):
+    """Stream video from the camera with the given camera_id using WebSocket."""
     camera = next((c for c in cameras if c.camera_id == camera_id), None)
     if not camera:
         await websocket.close(code=1000)
