@@ -44,6 +44,7 @@ podman run --name service-pma -p 8080:80 -e PMA_HOST=service-mysql --network net
 ### Download Model files then put in project
 
 [Download here](https://drive.google.com/drive/folders/1GGcKz8bqPll6PWNh4bPjFIH0fmOdof4p?usp=sharing)
+[Download data to import to sql here](https://drive.google.com/drive/folders/15hmaJOK1-Xj1cMdl8Ajss_UuBf-vKqxr?usp=sharing)
 
 Then put into following path (Not fix to be this path but it would be great)
 
@@ -54,6 +55,13 @@ Then put into following path (Not fix to be this path but it would be great)
 ### Create .env file
 
 Take a look at description in example.env and fill out those parameter
+
+### Install node dependencies
+
+```
+cd frontend
+pnpm
+```
 
 ## Usage
 
