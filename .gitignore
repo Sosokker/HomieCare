@@ -213,3 +213,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+*.pkl
+train/
