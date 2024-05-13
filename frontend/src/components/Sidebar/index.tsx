@@ -68,7 +68,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <NavLink to="/">
           <span className="flex">
             <img src={Logo} alt="Logo" />
-            <p className="mt-3 font-bold">Elderly Health Care</p>
+            <p className="mt-3 font-bold">HomieCare</p>
           </span>
         </NavLink>
 
