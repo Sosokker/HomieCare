@@ -93,7 +93,7 @@ const Statistic: React.FC = () => {
         </div>
 
         {/* Recommendation Card */}
-        <div className="mt-6">
+        <div className="mt-6" id="alert-container">
           <Alert
             indoor_temp={indoorWeatherData?.avg_indoor_temp}
             outdoor_temp={outdoorWeatherData?.avg_outdoor_temp}
